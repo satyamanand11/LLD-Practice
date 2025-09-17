@@ -38,7 +38,7 @@ A comprehensive parking lot management system implementing SOLID principles, des
 For detailed documentation, see [parking-lot-management-system/README.md](parking-lot-management-system/README.md)
 
 ### 2. High-Performance Key-Value Store
-**Location**: `src/` (Key-Value Store implementation)
+**Location**: `key-value-store/` (Key-Value Store implementation)
 
 A production-ready, thread-safe Key-Value store designed for high throughput, low latency, and fault tolerance.
 
@@ -67,7 +67,7 @@ A production-ready, thread-safe Key-Value store designed for high throughput, lo
 - NIO network service for high throughput
 - Thread-safe concurrent access
 
-For detailed documentation, see [KVSTORE_README.md](KVSTORE_README.md)
+For detailed documentation, see [key-value-store/README.md](key-value-store/README.md)
 
 ## Getting Started
 
