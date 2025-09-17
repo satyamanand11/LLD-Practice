@@ -37,6 +37,38 @@ A comprehensive parking lot management system implementing SOLID principles, des
 
 For detailed documentation, see [parking-lot-management-system/README.md](parking-lot-management-system/README.md)
 
+### 2. High-Performance Key-Value Store
+**Location**: `src/` (Key-Value Store implementation)
+
+A production-ready, thread-safe Key-Value store designed for high throughput, low latency, and fault tolerance.
+
+**Features**:
+- Thread-safe operations with ReadWrite locks
+- Byte[] operations for maximum performance
+- Async operations with CompletableFuture
+- Batch operations for high throughput
+- LSM-Tree architecture with WAL and SSTables
+- Master-slave replication for fault tolerance
+- NIO-based network service for high throughput
+- Support for primitives and collections with type safety
+- Performance metrics and monitoring
+
+**Key Design Patterns**:
+- **Command Pattern**: Operations encapsulation (Redis-like)
+- **Strategy Pattern**: Value type handling
+- **Observer Pattern**: Event monitoring
+- **Factory Pattern**: Value creation
+- **Template Method**: Common operation structure
+
+**Architecture**:
+- LSM-Tree with MemTable and SSTables for persistence
+- Write-Ahead Logging (WAL) for durability
+- Master-slave replication for fault tolerance
+- NIO network service for high throughput
+- Thread-safe concurrent access
+
+For detailed documentation, see [KVSTORE_README.md](KVSTORE_README.md)
+
 ## Getting Started
 
 Each project in this repository is self-contained and can be run independently. Navigate to the specific project directory for detailed setup instructions.
