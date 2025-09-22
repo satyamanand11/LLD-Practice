@@ -11,10 +11,12 @@ public class ValueFactory {
         return new PrimitiveValue(value, primitiveType);
     }
     
+    @SuppressWarnings("unchecked")
     public Value createList(Collection<?> values, PrimitiveType primitiveType) {
         return new ListValue((List<Object>) values, primitiveType);
     }
     
+    @SuppressWarnings("unchecked")
     public Value createSet(Collection<?> values, PrimitiveType primitiveType) {
         return new SetValue((Set<Object>) values, primitiveType);
     }
