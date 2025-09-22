@@ -6,11 +6,13 @@ import java.util.Collection;
 
 public interface KeyValueStore {
     Result<Void> setPrimitive(String key, Object value);
-    Result<Void> setList(String key, Collection<?> values);
-    Result<Void> setSet(String key, Collection<?> values);
+    <T> Result<Void> setList(String key, Collection<T> values);
+    <T> Result<Void> setSet(String key, Collection<T> values);
+
     Result<Value> get(String key);
     Result<Void> deleteKey(String key);
-    Result<Void> addToCollection(String key, Collection<?> values);
-    Result<Collection<?>> fetchFromCollection(String key, int limit);
-    Result<Void> removeFromCollection(String key, Collection<?> values);
+
+    <T> Result<Void> addToCollection(String key, Collection<T> values);
+    <T> Result<Collection<T>> fetchFromCollection(String key, int limit);
+    <T> Result<Void> removeFromCollection(String key, Collection<T> values);
 }

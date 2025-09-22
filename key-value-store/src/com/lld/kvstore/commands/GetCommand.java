@@ -1,6 +1,8 @@
 package com.lld.kvstore.commands;
 
 import com.lld.kvstore.core.KeyValueStore;
+import com.lld.kvstore.types.Result;
+import com.lld.kvstore.types.Value;
 
 public class GetCommand implements Command {
     private final KeyValueStore store;
@@ -12,7 +14,7 @@ public class GetCommand implements Command {
     }
     
     @Override
-    public Object execute() {
+    public Result<Value> execute() {
         return store.get(key);
     }
 }

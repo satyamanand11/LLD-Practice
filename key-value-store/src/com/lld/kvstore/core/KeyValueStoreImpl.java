@@ -41,7 +41,7 @@ public class KeyValueStoreImpl implements KeyValueStore {
     }
     
     @Override
-    public Result<Void> setList(String key, Collection<?> values) {
+    public <T> Result<Void> setList(String key, Collection<T> values) {
         ReadWriteLock lock = concurrencyManager.getLock(key);
         lock.writeLock().lock();
         try {
@@ -62,7 +62,7 @@ public class KeyValueStoreImpl implements KeyValueStore {
     }
     
     @Override
-    public Result<Void> setSet(String key, Collection<?> values) {
+    public <T> Result<Void> setSet(String key, Collection<T> values) {
         ReadWriteLock lock = concurrencyManager.getLock(key);
         lock.writeLock().lock();
         try {
@@ -81,7 +81,7 @@ public class KeyValueStoreImpl implements KeyValueStore {
             lock.writeLock().unlock();
         }
     }
-    
+
     @Override
     public Result<Value> get(String key) {
         ReadWriteLock lock = concurrencyManager.getLock(key);
@@ -110,9 +110,9 @@ public class KeyValueStoreImpl implements KeyValueStore {
             lock.writeLock().unlock();
         }
     }
-    
+
     @Override
-    public Result<Void> addToCollection(String key, Collection<?> values) {
+    public <T> Result<Void> addToCollection(String key, Collection<T> values) {
         ReadWriteLock lock = concurrencyManager.getLock(key);
         lock.writeLock().lock();
         try {
@@ -122,12 +122,12 @@ public class KeyValueStoreImpl implements KeyValueStore {
             Value currentValue = (Value) existing.getValue();
             if (currentValue instanceof ListValue) {
                 ListValue listValue = (ListValue) currentValue;
-                for (Object value : values) {
+                for (T value : values) {
                     listValue.add(value);
                 }
             } else if (currentValue instanceof SetValue) {
                 SetValue setValue = (SetValue) currentValue;
-                for (Object value : values) {
+                for (T value : values) {
                     setValue.add(value);
                 }
             } else {
@@ -143,7 +143,7 @@ public class KeyValueStoreImpl implements KeyValueStore {
     }
     
     @Override
-    public Result<Collection<?>> fetchFromCollection(String key, int limit) {
+    public <T> Result<Collection<T>> fetchFromCollection(String key, int limit) {
         ReadWriteLock lock = concurrencyManager.getLock(key);
         lock.readLock().lock();
         try {
@@ -151,14 +151,14 @@ public class KeyValueStoreImpl implements KeyValueStore {
                 .orElseThrow(() -> new IllegalArgumentException("Key not found: " + key));
             
             Value currentValue = (Value) existing.getValue();
-            Collection<?> result;
+            Collection<T> result;
             
             if (currentValue instanceof ListValue) {
                 ListValue listValue = (ListValue) currentValue;
-                result = listValue.getValues();
+                result = (Collection<T>) listValue.getValues();
             } else if (currentValue instanceof SetValue) {
                 SetValue setValue = (SetValue) currentValue;
-                result = setValue.getValues();
+                result = (Collection<T>) setValue.getValues();
             } else {
                 return Result.error("Key does not contain a collection");
             }
@@ -176,7 +176,7 @@ public class KeyValueStoreImpl implements KeyValueStore {
     }
     
     @Override
-    public Result<Void> removeFromCollection(String key, Collection<?> values) {
+    public <T> Result<Void> removeFromCollection(String key, Collection<T> values) {
         ReadWriteLock lock = concurrencyManager.getLock(key);
         lock.writeLock().lock();
         try {
@@ -186,12 +186,12 @@ public class KeyValueStoreImpl implements KeyValueStore {
             Value currentValue = (Value) existing.getValue();
             if (currentValue instanceof ListValue) {
                 ListValue listValue = (ListValue) currentValue;
-                for (Object value : values) {
+                for (T value : values) {
                     listValue.remove(value);
                 }
             } else if (currentValue instanceof SetValue) {
                 SetValue setValue = (SetValue) currentValue;
-                for (Object value : values) {
+                for (T value : values) {
                     setValue.remove(value);
                 }
             } else {

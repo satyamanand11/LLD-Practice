@@ -11,6 +11,6 @@ public class ConcurrencyManager {
     }
     
     public ReentrantReadWriteLock getLock(String key) {
-        return locks.computeIfAbsent(key, k -> new ReentrantReadWriteLock());
+        return locks.computeIfAbsent(key, _ -> new ReentrantReadWriteLock());
     }
 }

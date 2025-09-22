@@ -1,6 +1,7 @@
 package com.lld.kvstore.commands;
 
 import com.lld.kvstore.core.KeyValueStore;
+import com.lld.kvstore.types.Result;
 
 public class SetPrimitiveCommand implements Command {
     private final KeyValueStore store;
@@ -14,7 +15,7 @@ public class SetPrimitiveCommand implements Command {
     }
     
     @Override
-    public Object execute() {
+    public Result<Void> execute() {
         return store.setPrimitive(key, value);
     }
 }

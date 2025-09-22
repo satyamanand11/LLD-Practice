@@ -59,7 +59,7 @@ public class Main {
         Result<Void> addToList = store.addToCollection("fruits", moreFruits);
         System.out.println("Add to list: " + addToList);
         
-        Result<java.util.Collection<?>> fetchList = store.fetchFromCollection("fruits", 3);
+        Result<java.util.Collection<String>> fetchList = store.fetchFromCollection("fruits", 3);
         System.out.println("Fetch from list (limit 3): " + fetchList);
     }
     
@@ -77,7 +77,7 @@ public class Main {
         Result<Void> addToSet = store.addToCollection("colors", moreColors);
         System.out.println("Add to set: " + addToSet);
         
-        Result<java.util.Collection<?>> fetchSet = store.fetchFromCollection("colors", 0);
+        Result<java.util.Collection<String>> fetchSet = store.fetchFromCollection("colors", 0);
         System.out.println("Fetch from set: " + fetchSet);
     }
     
