@@ -1,6 +1,6 @@
-# Key-Value Store - Simplified Design
+# Key-Value Store - Clean Architecture
 
-A clean, interview-friendly Key-Value store implementation following SOLID principles and design patterns.
+A clean, interview-friendly Key-Value store implementation with meaningful package names and clear separation of concerns.
 
 ## Problem Statement
 
@@ -35,7 +35,7 @@ Design and implement a Key-Value (KV) data store that can perform the following 
 
 1. **Command Pattern** - Encapsulates operations as objects (similar to Redis)
 2. **Factory Pattern** - Creates value objects based on type descriptors
-3. **Strategy Pattern** - Type enforcement and validation strategies
+3. **Strategy Pattern** - Type validation and enforcement strategies
 4. **Observer Pattern** - Can be easily extended for event notifications
 
 ### SOLID Principles Applied
@@ -49,45 +49,43 @@ Design and implement a Key-Value (KV) data store that can perform the following 
 
 ```
 src/com/lld/kvstore/
-├── api/                          # API Layer
+├── core/                         # Core Business Logic
 │   ├── KeyValueStore.java        # Main store interface
-│   ├── Command.java              # Command interface
-│   ├── CommandBus.java           # Command dispatcher
-│   └── Result.java               # Result wrapper
-├── domain/                       # Domain Layer
-│   ├── HolderType.java           # Enum: PRIMITIVE, LIST, SET
-│   ├── PrimitiveKind.java        # Enum: STRING, INTEGER, LONG, etc.
+│   └── KeyValueStoreImpl.java    # Main store implementation
+├── types/                        # Type System
+│   ├── ValueType.java            # Enum: PRIMITIVE, LIST, SET
+│   ├── PrimitiveType.java        # Enum: STRING, INTEGER, LONG, etc.
 │   ├── TypeDescriptor.java       # Type information holder
 │   ├── Value.java                # Abstract value class
 │   ├── PrimitiveValue.java       # Primitive value implementation
 │   ├── ListValue.java            # List value implementation
-│   └── SetValue.java             # Set value implementation
-├── infrastructure/               # Infrastructure Layer
-│   ├── StoredEntry.java          # Storage entry wrapper
+│   ├── SetValue.java             # Set value implementation
+│   └── Result.java               # Result wrapper
+├── storage/                      # Storage Layer
+│   ├── StorageEntry.java         # Storage entry wrapper
 │   ├── Storage.java              # Storage interface
 │   ├── InMemoryStorage.java      # In-memory storage implementation
-│   ├── ValueFactory.java         # Value factory interface
-│   ├── DefaultValueFactory.java  # Default value factory
-│   ├── TypeEnforcer.java         # Type validation and enforcement
-│   └── LockManager.java          # Concurrency management
-├── application/                  # Application Layer
-│   ├── KeyValueStoreImpl.java    # Main store implementation
-│   └── commands/                 # Command implementations
-│       ├── SetPrimitiveCommand.java
-│       ├── GetCommand.java
-│       └── DeleteKeyCommand.java
+│   ├── TypeValidator.java        # Type validation and enforcement
+│   ├── ValueFactory.java         # Value factory
+│   └── ConcurrencyManager.java   # Concurrency management
+├── commands/                     # Command Pattern
+│   ├── Command.java              # Command interface
+│   ├── CommandBus.java           # Command dispatcher
+│   ├── SetPrimitiveCommand.java  # Set primitive command
+│   ├── GetCommand.java           # Get command
+│   └── DeleteCommand.java        # Delete command
 └── Main.java                     # Demo application
 ```
 
 ## Key Features
 
 ### 1. Type Safety
-- **Type Descriptor**: Encapsulates both holder type (PRIMITIVE, LIST, SET) and primitive kind
-- **Type Enforcement**: Validates type compatibility on every operation
+- **Type Descriptor**: Encapsulates both value type (PRIMITIVE, LIST, SET) and primitive type
+- **Type Validator**: Validates type compatibility on every operation
 - **Immutable Types**: Once set, the type cannot be changed for a key
 
 ### 2. Thread Safety
-- **Lock Manager**: Provides per-key locking for concurrent access
+- **Concurrency Manager**: Provides per-key locking for concurrent access
 - **Read-Write Locks**: Optimized for read-heavy workloads
 - **Thread-Safe Collections**: All collections are thread-safe
 
@@ -98,7 +96,7 @@ src/com/lld/kvstore/
 
 ### 4. Clean Architecture
 - **Layered Design**: Clear separation of concerns
-- **Dependency Injection**: Loose coupling between components
+- **Meaningful Packages**: Easy to understand package structure
 - **Interface-Based**: Easy to mock and test
 
 ## Usage Examples
@@ -108,10 +106,10 @@ src/com/lld/kvstore/
 ```java
 // Create store instance
 Storage storage = new InMemoryStorage();
-TypeEnforcer enforcer = new TypeEnforcer();
-ValueFactory factory = new DefaultValueFactory();
-LockManager lockManager = new LockManager();
-KeyValueStore store = new KeyValueStoreImpl(storage, enforcer, factory, lockManager);
+TypeValidator typeValidator = new TypeValidator();
+ValueFactory valueFactory = new ValueFactory();
+ConcurrencyManager concurrencyManager = new ConcurrencyManager();
+KeyValueStore store = new KeyValueStoreImpl(storage, typeValidator, valueFactory, concurrencyManager);
 
 // Primitive operations
 store.setPrimitive("name", "John Doe");
@@ -165,11 +163,19 @@ java -cp out com.lld.kvstore.Main
 ## Design Benefits
 
 1. **Interview Friendly**: Clean, simple design that's easy to explain
-2. **Extensible**: Easy to add new value types or operations
-3. **Testable**: Clear interfaces make unit testing straightforward
-4. **Maintainable**: Well-organized code with clear responsibilities
-5. **Type Safe**: Prevents runtime type errors
-6. **Thread Safe**: Handles concurrent access properly
+2. **Meaningful Names**: Package and class names clearly indicate purpose
+3. **Extensible**: Easy to add new value types or operations
+4. **Testable**: Clear interfaces make unit testing straightforward
+5. **Maintainable**: Well-organized code with clear responsibilities
+6. **Type Safe**: Prevents runtime type errors
+7. **Thread Safe**: Handles concurrent access properly
+
+## Package Naming Convention
+
+- **`core`**: Core business logic and main interfaces
+- **`types`**: Type system and value representations
+- **`storage`**: Storage layer and data persistence
+- **`commands`**: Command pattern implementation
 
 ## Future Enhancements
 
