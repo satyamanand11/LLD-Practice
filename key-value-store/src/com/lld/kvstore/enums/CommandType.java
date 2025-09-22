@@ -1,4 +1,4 @@
-package com.lld.kvstore.enums;
+package com.lld.kvstore.com.lld.kvstore.enums;
 
 public enum CommandType {
     PUT,

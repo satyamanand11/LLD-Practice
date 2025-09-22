@@ -2,6 +2,10 @@ package com.lld.kvstore.services;
 
 import com.lld.kvstore.interfaces.ByteKeyValueStore;
 import com.lld.kvstore.models.Result;
+import com.lld.kvstore.persistence.*;
+import com.lld.kvstore.network.NetworkService;
+import com.lld.kvstore.metrics.MetricsCollector;
+import com.lld.kvstore.replication.ReplicationManager;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -17,6 +21,13 @@ public class HighPerformanceKeyValueStore implements ByteKeyValueStore {
     private final ExecutorService readExecutor;
     private final ScheduledExecutorService backgroundExecutor;
     private final AtomicLong operationCounter;
+    
+    private final PersistenceLayer persistenceLayer;
+    private final NetworkService networkService;
+    private final MetricsCollector metricsCollector;
+    private final ReplicationManager replicationManager;
+    private final MemTable memTable;
+    private final WriteAheadLog wal;
     
     public HighPerformanceKeyValueStore(int maxMemTableSize, int batchSize, long flushIntervalMs) {
         this.store = new ConcurrentHashMap<>();
@@ -37,6 +48,15 @@ public class HighPerformanceKeyValueStore implements ByteKeyValueStore {
             return t;
         });
         this.operationCounter = new AtomicLong(0);
+        
+        this.memTable = new MemTable(maxMemTableSize);
+        this.wal = new WriteAheadLog();
+        this.persistenceLayer = new PersistenceLayer(wal, memTable);
+        this.networkService = new NetworkService(this, 8080);
+        this.metricsCollector = new MetricsCollector();
+        this.replicationManager = new ReplicationManager(this, ReplicationManager.ReplicationRole.MASTER);
+        
+        startBackgroundTasks(flushIntervalMs);
     }
     
     @Override
@@ -265,11 +285,73 @@ public class HighPerformanceKeyValueStore implements ByteKeyValueStore {
         return Result.ofSuccess(true);
     }
     
+    private void startBackgroundTasks(long flushIntervalMs) {
+        backgroundExecutor.scheduleAtFixedRate(() -> {
+            try {
+                persistenceLayer.flush();
+            } catch (Exception e) {
+                System.err.println("Error during background flush: " + e.getMessage());
+            }
+        }, flushIntervalMs, flushIntervalMs, TimeUnit.MILLISECONDS);
+        
+        backgroundExecutor.scheduleAtFixedRate(() -> {
+            try {
+                persistenceLayer.compact();
+            } catch (Exception e) {
+                System.err.println("Error during background compaction: " + e.getMessage());
+            }
+        }, flushIntervalMs * 2, flushIntervalMs * 2, TimeUnit.MILLISECONDS);
+    }
+    
+    @Override
+    public Result<Boolean> start(int port) {
+        try {
+            replicationManager.start();
+            networkService.start();
+            return Result.ofSuccess(true);
+        } catch (Exception e) {
+            return Result.ofError("Failed to start services: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public Result<Boolean> stop() {
+        try {
+            networkService.stop();
+            replicationManager.stop();
+            return Result.ofSuccess(true);
+        } catch (Exception e) {
+            return Result.ofError("Failed to stop services: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public Result<Metrics> getMetrics() {
+        try {
+            MetricsCollector.MetricsSnapshot snapshot = metricsCollector.getSnapshot();
+            Metrics metrics = new Metrics(
+                snapshot.getTotalOperations(),
+                snapshot.getPutOperations(),
+                snapshot.getGetOperations(),
+                snapshot.getDeleteOperations(),
+                snapshot.getAverageLatencyMs(),
+                snapshot.getThroughputOpsPerSecond(),
+                snapshot.getMemoryUsageBytes(),
+                snapshot.getDiskUsageBytes()
+            );
+            return Result.ofSuccess(metrics);
+        } catch (Exception e) {
+            return Result.ofError("Failed to get metrics: " + e.getMessage());
+        }
+    }
+    
     public void shutdown() {
         try {
+            stop();
             writeExecutor.shutdown();
             readExecutor.shutdown();
             backgroundExecutor.shutdown();
+            metricsCollector.shutdown();
             
             if (!writeExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
                 writeExecutor.shutdownNow();
