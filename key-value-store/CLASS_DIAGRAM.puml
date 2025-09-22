@@ -1,0 +1,139 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package "API Layer" {
+  interface KeyValueStore {
+    + setPrimitive(key : String, value : Object) : Result
+    + setList(key : String, values : Collection) : Result
+    + setSet(key : String, values : Collection) : Result
+    + get(key : String) : Result
+    + deleteKey(key : String) : Result
+    + addToCollection(key : String, values : Collection) : Result
+    + fetchFromCollection(key : String, limit : int) : Result
+    + removeFromCollection(key : String, values : Collection) : Result
+  }
+
+  interface Command {
+    + execute() : Object
+  }
+  class CommandBus {
+    + dispatch(cmd : Command) : Object
+  }
+  class Result {
+    + isOk() : boolean
+    + get() : Object
+    + error() : String
+  }
+}
+
+package "Domain Layer" {
+  enum HolderType {
+    PRIMITIVE
+    LIST
+    SET
+  }
+  enum PrimitiveKind {
+    STRING
+    INTEGER
+    LONG
+    DOUBLE
+    FLOAT
+    BOOLEAN
+  }
+
+  class TypeDescriptor {
+    - holder : HolderType
+    - primitive : PrimitiveKind
+    + holderType() : HolderType
+    + primitiveKind() : PrimitiveKind
+  }
+
+  abstract class Value {
+    + type() : TypeDescriptor
+  }
+  class PrimitiveValue extends Value {
+    - value : Object
+    + get() : Object
+  }
+  class ListValue extends Value {
+    - values : List
+    + get() : List
+  }
+  class SetValue extends Value {
+    - values : Set
+    + get() : Set
+  }
+}
+
+package "Infrastructure Layer" {
+  class StoredEntry {
+    + key : String
+    + type : TypeDescriptor
+    + payload : Object
+  }
+  interface Storage {
+    + read(key : String) : StoredEntry
+    + write(key : String, entry : StoredEntry)
+    + delete(key : String)
+  }
+  class InMemoryStorage implements Storage
+
+  interface ValueFactory {
+    + createPrimitive(type : TypeDescriptor, data : Object) : Value
+    + create(type : TypeDescriptor, data : Collection) : Value
+  }
+  class DefaultValueFactory implements ValueFactory
+
+  class TypeEnforcer {
+    + descriptorForPrimitive(value : Object) : TypeDescriptor
+    + descriptorForCollection(holder : HolderType, values : Collection) : TypeDescriptor
+    + ensureCompatible(existing : StoredEntry, incoming : TypeDescriptor)
+  }
+
+  class LockManager {
+    + forKey(key : String) : ReentrantReadWriteLock
+  }
+  class ReadLockGuard
+  class WriteLockGuard
+}
+
+package "Application Layer" {
+  class KeyValueStoreImpl implements KeyValueStore {
+    - storage : Storage
+    - enforcer : TypeEnforcer
+    - factory : ValueFactory
+    - lockManager : LockManager
+  }
+
+  class SetPrimitiveCommand implements Command
+  class SetListCommand implements Command
+  class SetSetCommand implements Command
+  class GetCommand implements Command
+  class DeleteKeyCommand implements Command
+  class AddToCollectionCommand implements Command
+  class RemoveFromCollectionCommand implements Command
+  class FetchFromCollectionCommand implements Command
+}
+
+' Relationships
+KeyValueStoreImpl --> Storage
+KeyValueStoreImpl --> TypeEnforcer
+KeyValueStoreImpl --> ValueFactory
+KeyValueStoreImpl --> LockManager
+
+InMemoryStorage --> StoredEntry
+DefaultValueFactory --> Value
+TypeEnforcer --> TypeDescriptor
+Value --> TypeDescriptor
+
+CommandBus --> Command
+Command <|-- SetPrimitiveCommand
+Command <|-- SetListCommand
+Command <|-- SetSetCommand
+Command <|-- GetCommand
+Command <|-- DeleteKeyCommand
+Command <|-- AddToCollectionCommand
+Command <|-- RemoveFromCollectionCommand
+Command <|-- FetchFromCollectionCommand
+@enduml

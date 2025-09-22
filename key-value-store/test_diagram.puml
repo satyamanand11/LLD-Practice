@@ -1,0 +1,18 @@
+@startuml
+!theme plain
+
+package "Test Package" {
+  interface TestInterface {
+    + testMethod(param : String) : String
+  }
+  
+  class TestClass {
+    - field : String
+    + getField() : String
+    + setField(value : String)
+  }
+}
+
+TestClass ..|> TestInterface
+
+@enduml
