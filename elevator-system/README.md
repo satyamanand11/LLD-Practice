@@ -2,11 +2,19 @@
 
 A comprehensive elevator system implementation using Java with command pattern, event-driven architecture, and multiple scheduling strategies.
 
-## ER Diagram
+## Diagrams
+
+### ER Diagram
 
 ![Elevator System Data Model](er-diagram.png)
 
 [View Interactive ER Diagram](https://app.eraser.io/workspace/xD9jCdB8ZG5LSphhWETP)
+
+### Class Diagram
+
+![Elevator System Class Diagram](class-diagram.png)
+
+[View PlantUML Source](class-diagram.puml)
 
 The ER diagram shows the comprehensive data model for the elevator system, including:
 - **Event Entities**: `served_events`, `elevator_moved_events`, `assignment_events`

@@ -1,0 +1,141 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+
+' ===== Placeholder Enums =====
+enum Direction { UP DOWN IDLE }
+enum ElevatorMode { NORMAL OUT_OF_SERVICE }
+enum ButtonState { IDLE ENGAGED DISABLED }
+enum EventType { HALL_CALL ASSIGNMENT SERVED ELEVATOR_MOVED }
+
+' ===== Observer =====
+interface Subscriber {
+  +onEvent(type: EventType, payload: Object)
+}
+class DomainEventBus {
+  +subscribe(type: EventType, s: Subscriber)
+  +publish(type: EventType, payload: Object)
+}
+
+' ===== Core Entities =====
+class Elevator {
+  -number : int
+  -currentFloor : int
+  -direction : Direction
+  -mode : ElevatorMode
+  +Elevator(number : int, startFloor : int, bus : DomainEventBus)
+  +getNumber() : int
+  +getCurrentFloor() : int
+  +getDirection() : Direction
+  +getMode() : ElevatorMode
+  +enqueue(floor : int, dir : Direction)
+  +removeStop(floor : int, dir : Direction)
+  +stepOne()
+  +status() : String
+}
+
+class Target {
+  -floorFrom : int
+  -direction : Direction
+  +Target(floorFrom : int, direction : Direction)
+}
+
+class ElevatorSnapshot {
+  +id() : int
+  +floor() : int
+  +direction() : Direction
+  +mode() : ElevatorMode
+}
+
+class ElevatorManager {
+  -elevators : Map
+  +ElevatorManager(list : List)
+  +getAll() : List
+  +addToTargetQueue(elevatorNumber : int, target : Target)
+  +removeFromTargetQueue(elevatorNumber : int, target : Target)
+  +snapshotAll() : List
+  +removeForOthers(servingElevatorNumber : int, floor : int, dir : Direction)
+  +stepAll()
+}
+
+' ===== Strategies =====
+interface SchedulerStrategy {
+  +select(floor : int, direction : Direction, elevators : List) : List
+}
+class BroadcastStrategy
+class ExclusiveEtaStrategy
+
+' ===== Commands =====
+interface Command { +execute() }
+interface CommandBus { +submit(c : Command) +shutdown() }
+
+class HallCallCommand {
+  -dto : HallCallDTO
+  -service : ElevatorService
+  +execute()
+}
+class CarCallCommand {
+  -dto : CarCallDTO
+  -service : ElevatorService
+  +execute()
+}
+
+' ===== Buttons =====
+abstract class Button {
+  +getId() : int
+  +getState() : ButtonState
+  +press()
+}
+class HallButton {
+  +HallButton(floor : int, dir : Direction, bus : CommandBus, svc : ElevatorService)
+  +press()
+}
+class CabinButton {
+  +CabinButton(elevatorId : int, floor : int, bus : CommandBus, svc : ElevatorService)
+  +press()
+}
+
+' ===== DTOs =====
+class HallCallDTO { +floor() : int +direction() : Direction }
+class CarCallDTO { +elevatorId() : int +floor() : int }
+
+' ===== Registry & Service =====
+class PendingHallRegistry {
+  +PendingHallRegistry(bus : DomainEventBus, mgr : ElevatorManager)
+  +add(floor : int, dir : Direction)
+}
+
+class ElevatorService {
+  -elevatorManager : ElevatorManager
+  -eventBus : DomainEventBus
+  -pendingRegistry : PendingHallRegistry
+  -scheduler : SchedulerStrategy
+  +ElevatorService(m : ElevatorManager, s : SchedulerStrategy, bus : DomainEventBus)
+  +setStrategy(strategy : SchedulerStrategy)
+  +requestElevator(floor : int, direction : Direction)
+  +requestCarCall(elevatorId : int, floor : int)
+  +stepAll()
+  +printStatus()
+}
+
+' ===== Relationships =====
+ElevatorManager "1" o-- "*" Elevator
+ElevatorService --> ElevatorManager
+ElevatorService --> SchedulerStrategy
+ElevatorService --> DomainEventBus
+PendingHallRegistry --> DomainEventBus
+PendingHallRegistry --> ElevatorManager
+BroadcastStrategy ..|> SchedulerStrategy
+ExclusiveEtaStrategy ..|> SchedulerStrategy
+HallCallCommand --> HallCallDTO
+HallCallCommand --> ElevatorService
+CarCallCommand --> CarCallDTO
+CarCallCommand --> ElevatorService
+HallButton --> CommandBus
+HallButton --> ElevatorService
+CabinButton --> CommandBus
+CabinButton --> ElevatorService
+DomainEventBus --> Subscriber
+ElevatorManager --> ElevatorSnapshot
+Elevator --> DomainEventBus
+@enduml
