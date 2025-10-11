@@ -2,7 +2,7 @@
 skinparam classAttributeIconSize 0
 hide circle
 
-' ===== Placeholder Enums =====
+' ===== Enums =====
 enum Direction {
   UP
   DOWN
@@ -27,13 +27,14 @@ enum EventType {
   ELEVATOR_MOVED
 }
 
-' ===== Observer (Publisher/Subscriber) =====
+' ===== Observer Pattern =====
 interface Subscriber {
-  +onEvent(type: EventType, payload: Object)
+  +onEvent(type : EventType, payload : Object)
 }
+
 class DomainEventBus {
-  +subscribe(type: EventType, s: Subscriber)
-  +publish(type: EventType, payload: Object)
+  +subscribe(type : EventType, s : Subscriber)
+  +publish(type : EventType, payload : Object)
 }
 
 ' ===== Core Entities =====
@@ -42,6 +43,9 @@ class Elevator {
   -currentFloor : int
   -direction : Direction
   -mode : ElevatorMode
+  -upTargets : SortedSet
+  -downTargets : SortedSet
+  -eventBus : DomainEventBus
   +Elevator(number : int, startFloor : int, bus : DomainEventBus)
   +getNumber() : int
   +getCurrentFloor() : int
@@ -49,6 +53,8 @@ class Elevator {
   +getMode() : ElevatorMode
   +enqueue(floor : int, dir : Direction)
   +removeStop(floor : int, dir : Direction)
+  +snapshotUp() : List
+  +snapshotDown() : List
   +stepOne()
   +status() : String
 }
@@ -64,6 +70,8 @@ class ElevatorSnapshot {
   +floor() : int
   +direction() : Direction
   +mode() : ElevatorMode
+  +upStops() : List
+  +downStops() : List
 }
 
 class ElevatorManager {
@@ -81,6 +89,7 @@ class ElevatorManager {
 interface SchedulerStrategy {
   +select(floor : int, direction : Direction, elevators : List) : List
 }
+
 class BroadcastStrategy
 class ExclusiveEtaStrategy
 
@@ -88,21 +97,23 @@ class ExclusiveEtaStrategy
 class SchedulerFactory {
   +create(type : String) : SchedulerStrategy
 }
-SchedulerFactory --> SchedulerStrategy : creates
 
 ' ===== Command Pattern =====
 interface Command {
   +execute()
 }
+
 interface CommandBus {
   +submit(c : Command)
   +shutdown()
 }
+
 class HallCallCommand {
   -dto : HallCallDTO
   -service : ElevatorService
   +execute()
 }
+
 class CarCallCommand {
   -dto : CarCallDTO
   -service : ElevatorService
@@ -115,10 +126,12 @@ abstract class Button {
   +getState() : ButtonState
   +press()
 }
+
 class HallButton {
   +HallButton(floor : int, dir : Direction, bus : CommandBus, svc : ElevatorService)
   +press()
 }
+
 class CabinButton {
   +CabinButton(elevatorId : int, floor : int, bus : CommandBus, svc : ElevatorService)
   +press()
@@ -129,12 +142,13 @@ class HallCallDTO {
   +floor() : int
   +direction() : Direction
 }
+
 class CarCallDTO {
   +elevatorId() : int
   +floor() : int
 }
 
-' ===== Registry & Service Layer =====
+' ===== Registry & Service =====
 class PendingHallRegistry {
   +PendingHallRegistry(bus : DomainEventBus, mgr : ElevatorManager)
   +add(floor : int, dir : Direction)
@@ -169,7 +183,7 @@ class ElevatorSystem {
 }
 
 ' ===== Relationships =====
-ElevatorManager ||--o{ Elevator : manages
+ElevatorManager "1" o-- "*" Elevator : manages
 ElevatorService --> ElevatorManager : uses
 ElevatorService --> SchedulerStrategy : uses
 ElevatorService --> DomainEventBus : uses
@@ -177,6 +191,7 @@ PendingHallRegistry --> DomainEventBus : uses
 PendingHallRegistry --> ElevatorManager : uses
 BroadcastStrategy ..|> SchedulerStrategy : implements
 ExclusiveEtaStrategy ..|> SchedulerStrategy : implements
+SchedulerFactory --> SchedulerStrategy : creates
 HallCallCommand --> HallCallDTO : uses
 HallCallCommand --> ElevatorService : uses
 CarCallCommand --> CarCallDTO : uses
