@@ -14,7 +14,7 @@ A comprehensive elevator system implementation using Java with command pattern, 
 
 ![Elevator System Class Diagram](class-diagram.png)
 
-[View PlantUML Source](class-diagram.puml) | [View Online Class Diagram](https://plantuml.online/)
+[View PlantUML Source](class-diagram.puml) | [View Online Class Diagram](https://tinyurl.com/elevator-class-diagram)
 
 The ER diagram shows the comprehensive data model for the elevator system, including:
 - **Event Entities**: `served_events`, `elevator_moved_events`, `assignment_events`
