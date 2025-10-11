@@ -3,12 +3,31 @@ skinparam classAttributeIconSize 0
 hide circle
 
 ' ===== Placeholder Enums =====
-enum Direction { UP DOWN IDLE }
-enum ElevatorMode { NORMAL OUT_OF_SERVICE }
-enum ButtonState { IDLE ENGAGED DISABLED }
-enum EventType { HALL_CALL ASSIGNMENT SERVED ELEVATOR_MOVED }
+enum Direction {
+  UP
+  DOWN
+  IDLE
+}
 
-' ===== Observer =====
+enum ElevatorMode {
+  NORMAL
+  OUT_OF_SERVICE
+}
+
+enum ButtonState {
+  IDLE
+  ENGAGED
+  DISABLED
+}
+
+enum EventType {
+  HALL_CALL
+  ASSIGNMENT
+  SERVED
+  ELEVATOR_MOVED
+}
+
+' ===== Observer (Publisher/Subscriber) =====
 interface Subscriber {
   +onEvent(type: EventType, payload: Object)
 }
@@ -58,17 +77,27 @@ class ElevatorManager {
   +stepAll()
 }
 
-' ===== Strategies =====
+' ===== Strategy Pattern =====
 interface SchedulerStrategy {
   +select(floor : int, direction : Direction, elevators : List) : List
 }
 class BroadcastStrategy
 class ExclusiveEtaStrategy
 
-' ===== Commands =====
-interface Command { +execute() }
-interface CommandBus { +submit(c : Command) +shutdown() }
+' ===== Factory Pattern =====
+class SchedulerFactory {
+  +create(type : String) : SchedulerStrategy
+}
+SchedulerFactory --> SchedulerStrategy : creates
 
+' ===== Command Pattern =====
+interface Command {
+  +execute()
+}
+interface CommandBus {
+  +submit(c : Command)
+  +shutdown()
+}
 class HallCallCommand {
   -dto : HallCallDTO
   -service : ElevatorService
@@ -96,10 +125,16 @@ class CabinButton {
 }
 
 ' ===== DTOs =====
-class HallCallDTO { +floor() : int +direction() : Direction }
-class CarCallDTO { +elevatorId() : int +floor() : int }
+class HallCallDTO {
+  +floor() : int
+  +direction() : Direction
+}
+class CarCallDTO {
+  +elevatorId() : int
+  +floor() : int
+}
 
-' ===== Registry & Service =====
+' ===== Registry & Service Layer =====
 class PendingHallRegistry {
   +PendingHallRegistry(bus : DomainEventBus, mgr : ElevatorManager)
   +add(floor : int, dir : Direction)
@@ -118,24 +153,41 @@ class ElevatorService {
   +printStatus()
 }
 
+' ===== Facade Layer (Singleton) =====
+class ElevatorSystem {
+  -static instance : ElevatorSystem
+  -service : ElevatorService
+  -bus : CommandBus
+  +init(service : ElevatorService, bus : CommandBus)
+  +getInstance() : ElevatorSystem
+  +pressUpButton(floor : int)
+  +pressDownButton(floor : int)
+  +pressCabinFloorButton(elevatorId : int, floor : int)
+  +step()
+  +print()
+  +shutdown()
+}
+
 ' ===== Relationships =====
-ElevatorManager "1" o-- "*" Elevator
-ElevatorService --> ElevatorManager
-ElevatorService --> SchedulerStrategy
-ElevatorService --> DomainEventBus
-PendingHallRegistry --> DomainEventBus
-PendingHallRegistry --> ElevatorManager
-BroadcastStrategy ..|> SchedulerStrategy
-ExclusiveEtaStrategy ..|> SchedulerStrategy
-HallCallCommand --> HallCallDTO
-HallCallCommand --> ElevatorService
-CarCallCommand --> CarCallDTO
-CarCallCommand --> ElevatorService
-HallButton --> CommandBus
-HallButton --> ElevatorService
-CabinButton --> CommandBus
-CabinButton --> ElevatorService
-DomainEventBus --> Subscriber
-ElevatorManager --> ElevatorSnapshot
-Elevator --> DomainEventBus
+ElevatorManager ||--o{ Elevator : manages
+ElevatorService --> ElevatorManager : uses
+ElevatorService --> SchedulerStrategy : uses
+ElevatorService --> DomainEventBus : uses
+PendingHallRegistry --> DomainEventBus : uses
+PendingHallRegistry --> ElevatorManager : uses
+BroadcastStrategy ..|> SchedulerStrategy : implements
+ExclusiveEtaStrategy ..|> SchedulerStrategy : implements
+HallCallCommand --> HallCallDTO : uses
+HallCallCommand --> ElevatorService : uses
+CarCallCommand --> CarCallDTO : uses
+CarCallCommand --> ElevatorService : uses
+HallButton --> CommandBus : uses
+HallButton --> ElevatorService : uses
+CabinButton --> CommandBus : uses
+CabinButton --> ElevatorService : uses
+DomainEventBus --> Subscriber : notifies
+ElevatorManager --> ElevatorSnapshot : creates
+Elevator --> DomainEventBus : publishes
+ElevatorSystem --> ElevatorService : facade-to-service
+ElevatorSystem --> CommandBus : orchestrates
 @enduml
