@@ -4,7 +4,16 @@ A comprehensive elevator system implementation using Java with command pattern, 
 
 ## ER Diagram
 
-[View Entity Relationship Diagram](https://app.eraser.io/workspace/xD9jCdB8ZG5LSphhWETP)
+![Elevator System Data Model](er-diagram.png)
+
+[View Interactive ER Diagram](https://app.eraser.io/workspace/xD9jCdB8ZG5LSphhWETP)
+
+The ER diagram shows the comprehensive data model for the elevator system, including:
+- **Event Entities**: `served_events`, `elevator_moved_events`, `assignment_events`
+- **DTOs**: `hall_call_dtos`, `car_call_dtos`, `elevator_snapshots`
+- **Core Components**: `elevators`, `buttons`, `targets`, `commands`
+- **System Management**: `elevator_systems`, `elevator_services`, `elevator_managers`
+- **Infrastructure**: `command_buses`, `domain_event_buses`, `scheduler_strategies`
 
 ## Basic Functional Requirements (Pre-LLD)
 
