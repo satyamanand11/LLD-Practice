@@ -1,6 +1,9 @@
-package com.lld.texteditor.domain;
+package com.lld.texteditor.domain.entity;
+
+import com.lld.texteditor.strategy.RunBufferStorage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class Document {
     private final DocumentId id;
@@ -40,9 +43,9 @@ public final class Document {
         var s = cws.style();
         var ch = cws.ch();
         StringBuilder sb = new StringBuilder()
-                .append(ch).append("-").append(s.fontName).append("-").append(s.fontSize);
-        if (s.bold) sb.append("-b");
-        if (s.italic) sb.append("-i");
+                .append(ch).append("-").append(s.fontName()).append("-").append(s.fontSize());
+        if (s.bold()) sb.append("-b");
+        if (s.italic()) sb.append("-i");
         return sb.toString();
     }
 

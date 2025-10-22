@@ -1,5 +1,10 @@
 package com.lld.texteditor.strategy;
 
+import com.lld.texteditor.domain.value.CharWithStyle;
+import com.lld.texteditor.domain.value.Style;
+import com.lld.texteditor.domain.value.DeletedSlice;
+import com.lld.texteditor.domain.value.StyleDelta;
+
 public interface TextStorage {
     int length();
 
@@ -7,7 +12,6 @@ public interface TextStorage {
 
     CharWithStyle getAt(int col);
 
-    // mutations
     void insert(int col, String text, Style style);
 
     DeletedSlice delete(int start, int length);

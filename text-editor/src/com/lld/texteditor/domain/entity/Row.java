@@ -1,4 +1,10 @@
-package com.lld.texteditor.domain;
+package com.lld.texteditor.domain.entity;
+
+import com.lld.texteditor.domain.value.CharWithStyle;
+import com.lld.texteditor.domain.value.Style;
+import com.lld.texteditor.domain.StyleDelta;
+import com.lld.texteditor.domain.value.DeletedSlice;
+import com.lld.texteditor.strategy.TextStorage;
 
 public final class Row {
     private final TextStorage buffer;
@@ -19,7 +25,6 @@ public final class Row {
         return buffer.getAt(col);
     }
 
-    // package-private: used by commands
     void insert(int col, String text, Style style) {
         buffer.insert(col, text, style);
     }

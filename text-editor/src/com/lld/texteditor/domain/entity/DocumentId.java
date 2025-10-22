@@ -1,4 +1,4 @@
-package com.lld.texteditor.domain;
+package com.lld.texteditor.domain.entity;
 
 public record DocumentId(int value) {
     public DocumentId {
