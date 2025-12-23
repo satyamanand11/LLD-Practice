@@ -45,8 +45,8 @@ public class Main {
                 assignmentRepo, allocationService, refundService, notifier, scheduler, clock
         );
 
-        // Facade
-        LockerSystem lockerSystem = new LockerSystemImpl(
+        // Facade - Using singleton pattern
+        LockerSystem lockerSystem = LockerSystemImpl.getInstance(
                 locationRepo, assignmentRepo, allocationService, codeGen, notifier, refundService, expiryService, clock
         );
 

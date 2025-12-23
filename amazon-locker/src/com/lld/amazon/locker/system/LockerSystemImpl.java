@@ -21,6 +21,10 @@ import java.util.List;
 public class LockerSystemImpl implements LockerSystem {
 
     private static final Duration HOLD_DURATION = Duration.ofDays(3);
+    
+    // Singleton instance
+    private static volatile LockerSystemImpl instance;
+    private static final Object lock = new Object();
 
     private final LocationRepository locationRepo;
     private final AssignmentRepository assignmentRepo;
@@ -31,7 +35,8 @@ public class LockerSystemImpl implements LockerSystem {
     private final ExpiryService expiryService;
     private final Clock clock;
 
-    public LockerSystemImpl(LocationRepository locationRepo,
+    // Private constructor to prevent instantiation
+    private LockerSystemImpl(LocationRepository locationRepo,
                             AssignmentRepository assignmentRepo,
                             LockerAllocationService allocationService,
                             CodeGenerator codeGenerator,
@@ -48,6 +53,56 @@ public class LockerSystemImpl implements LockerSystem {
         this.refundService = refundService;
         this.expiryService = expiryService;
         this.clock = clock;
+    }
+    
+    /**
+     * Get the singleton instance of LockerSystemImpl.
+     * This method initializes the instance with the provided dependencies on first call.
+     * Subsequent calls return the same instance.
+     * 
+     * @param locationRepo Location repository
+     * @param assignmentRepo Assignment repository
+     * @param allocationService Locker allocation service
+     * @param codeGenerator Code generator service
+     * @param notificationService Notification service
+     * @param refundService Refund service
+     * @param expiryService Expiry service
+     * @param clock Clock for time operations
+     * @return The singleton instance of LockerSystemImpl
+     */
+    public static LockerSystemImpl getInstance(LocationRepository locationRepo,
+                                               AssignmentRepository assignmentRepo,
+                                               LockerAllocationService allocationService,
+                                               CodeGenerator codeGenerator,
+                                               NotificationService notificationService,
+                                               RefundService refundService,
+                                               ExpiryService expiryService,
+                                               Clock clock) {
+        if (instance == null) {
+            synchronized (lock) {
+                if (instance == null) {
+                    instance = new LockerSystemImpl(
+                            locationRepo, assignmentRepo, allocationService, codeGenerator,
+                            notificationService, refundService, expiryService, clock
+                    );
+                }
+            }
+        }
+        return instance;
+    }
+    
+    /**
+     * Get the existing singleton instance.
+     * Throws IllegalStateException if instance hasn't been initialized.
+     * 
+     * @return The singleton instance of LockerSystemImpl
+     * @throws IllegalStateException if instance hasn't been initialized
+     */
+    public static LockerSystemImpl getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("LockerSystemImpl instance not initialized. Call getInstance(...) with dependencies first.");
+        }
+        return instance;
     }
 
     @Override
