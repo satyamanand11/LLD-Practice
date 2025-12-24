@@ -15,6 +15,26 @@ public class Account {
     private final Set<Role> roles = new HashSet<>();
     private boolean active;
 
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
     public Account(int accountId, String name, String email, Set<Role> initialRoles) {
 
         if (accountId <= 0) {
