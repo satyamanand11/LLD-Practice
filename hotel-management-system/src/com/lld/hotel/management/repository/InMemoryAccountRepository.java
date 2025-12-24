@@ -23,6 +23,8 @@ public class InMemoryAccountRepository implements AccountRepository {
 
     @Override
     public void save(Account account) {
+        // Atomic update: both maps updated together
+        // ConcurrentHashMap.put() is thread-safe
         byId.put(account.getAccountId(), account);
         byEmail.put(account.getEmail(), account);
     }
