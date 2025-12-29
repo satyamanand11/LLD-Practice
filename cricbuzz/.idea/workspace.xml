@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7db313d0-28b1-4014-8308-7018e29f81be" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/builder/MatchBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/builder/TournamentBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AddCommentaryCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AddNewsCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AssignScorerCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AssignUmpireCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/Command.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/CommandInvoker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/CommandResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/RecordTossCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/SetSquadCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/StartMatchCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/CommentaryAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/CommentaryComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/CommentaryDecorator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/HighlightsDecorator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/StatisticsDecorator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/TranslationDecorator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/commentary/Commentary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/commentary/CommentaryType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallEvent.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallOutcome$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallOutcome.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallOutcome.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/ExtraType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/ExtraType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Innings.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Innings.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Match.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Match.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/MatchStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/MatchStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Over.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Over.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/RunType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/RunType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Wicket.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Wicket.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/WicketType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/WicketType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/NotificationEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/NotificationType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/Subscription.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/SubscriptionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/player/Player.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/player/PlayerMatchStats.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/player/PlayerRole.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/team/Team.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/team/TeamStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/MatchFormat.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/MatchFormat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/Tournament.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/Tournament.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/TournamentStatus.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/TournamentStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/BoundaryEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/DomainEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/EventBus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/EventHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MatchEndEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MatchEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MatchStartEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MilestoneEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/WicketEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/facade/CricbuzzSystem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/facade/CricbuzzSystemImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/factory/ScoringStrategyFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/CommentaryRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/MatchRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/PlayerMatchStatsRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/PlayerRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/SubscriptionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/TeamRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/TournamentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryCommentaryRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryMatchRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryPlayerMatchStatsRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryPlayerRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemorySubscriptionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryTeamRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryTournamentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/CommentaryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/EnhancedCommentaryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/MatchService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/NotificationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/PlayerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/ScorecardService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/ScoringService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/TeamService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/TournamentService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/ODIScoringStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/ScoringStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/T20ScoringStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/TestScoringStrategy.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "onboarding.tips.debug.path": "/Users/satyam/lld-practice/cricbuzz/src/Main.java"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7db313d0-28b1-4014-8308-7018e29f81be" name="Changes" comment="" />
+      <created>1767005594691</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1767005594691</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/Main.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
