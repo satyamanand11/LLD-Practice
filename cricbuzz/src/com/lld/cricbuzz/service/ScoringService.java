@@ -3,6 +3,7 @@ package com.lld.cricbuzz.service;
 import com.lld.cricbuzz.domain.match.*;
 import com.lld.cricbuzz.domain.player.PlayerMatchStats;
 import com.lld.cricbuzz.events.*;
+import com.lld.cricbuzz.locking.LockManager;
 import com.lld.cricbuzz.repository.MatchRepository;
 import com.lld.cricbuzz.repository.PlayerMatchStatsRepository;
 
@@ -12,11 +13,15 @@ import java.util.UUID;
 /**
  * Service for recording ball-by-ball scoring
  * Single Responsibility: Match scoring operations
+ * 
+ * Uses LockManager at service layer for thread-safe operations
+ * Repositories remain simple data access layers
  */
 public class ScoringService {
     private final MatchRepository matchRepository;
     private final PlayerMatchStatsRepository statsRepository;
     private final EventBus eventBus;
+    private final LockManager lockManager;
 
     public ScoringService(MatchRepository matchRepository,
                          PlayerMatchStatsRepository statsRepository,
@@ -24,20 +29,21 @@ public class ScoringService {
         this.matchRepository = matchRepository;
         this.statsRepository = statsRepository;
         this.eventBus = eventBus;
+        this.lockManager = LockManager.getInstance();
     }
 
     /**
      * Records a ball event with thread-safe concurrency handling
-     * Uses match-level locking to prevent race conditions when multiple scorers
-     * update the same match simultaneously
+     * Uses LockManager at service layer for match-level locking
+     * This prevents race conditions when multiple scorers update the same match
      */
     public BallEvent recordBall(String matchId, int overNumber, int ballNumber,
                                 String bowlerId, String strikerId, String nonStrikerId,
                                 BallOutcome outcome) {
-        // Use match-level lock to ensure atomic updates
-        final BallEvent[] ballEventRef = new BallEvent[1];
-        
-        matchRepository.executeWithLock(matchId, match -> {
+        // Use LockManager at service layer for thread-safe updates
+        BallEvent ballEvent = lockManager.executeWithLock("Match", matchId, () -> {
+            Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found: " + matchId));
             if (match.getStatus() != MatchStatus.LIVE) {
                 throw new IllegalStateException("Match is not live");
             }
@@ -48,28 +54,31 @@ public class ScoringService {
             }
 
             String ballEventId = "BALL_" + UUID.randomUUID().toString().substring(0, 8);
-            BallEvent ballEvent = new BallEvent(ballEventId, currentInnings.getInningsId(),
+            BallEvent event = new BallEvent(ballEventId, currentInnings.getInningsId(),
                 overNumber, ballNumber, bowlerId, strikerId, nonStrikerId, outcome);
 
             // Get or create current over
             Over currentOver = getOrCreateOver(currentInnings, overNumber, bowlerId);
-            currentOver.addBall(ballEvent);
+            currentOver.addBall(event);
 
             // Handle strike rotation
             if (shouldRotateStrike(outcome)) {
                 currentInnings.rotateStrike();
             }
             
-            ballEventRef[0] = ballEvent;
+            // Save match within lock
+            matchRepository.save(match);
+            
+            return event;
         });
 
-        // Update player stats (with separate locking for stats)
+        // Update player stats (with separate locking for stats using LockManager)
         updatePlayerStats(matchId, strikerId, bowlerId, outcome);
 
         // Check for milestones and publish events (outside lock to avoid blocking)
         checkAndPublishEvents(matchId, strikerId, bowlerId, outcome);
 
-        return ballEventRef[0];
+        return ballEvent;
     }
 
     private Over getOrCreateOver(Innings innings, int overNumber, String bowlerId) {
@@ -96,48 +105,18 @@ public class ScoringService {
 
     /**
      * Updates player statistics with thread-safe locking
-     * Uses per-player-match locks to ensure atomic updates
+     * Uses LockManager at service layer for per-player-match locks
      */
     private void updatePlayerStats(String matchId, String batterId, String bowlerId, BallOutcome outcome) {
-        // Update batter stats with lock
-        if (statsRepository instanceof com.lld.cricbuzz.repository.impl.InMemoryPlayerMatchStatsRepository) {
-            com.lld.cricbuzz.repository.impl.InMemoryPlayerMatchStatsRepository repo = 
-                (com.lld.cricbuzz.repository.impl.InMemoryPlayerMatchStatsRepository) statsRepository;
-            
-            // Update batter stats atomically
-            repo.executeWithLock(batterId, matchId, batterStats -> {
-                if (outcome.isWicket()) {
-                    batterStats.recordDismissal(outcome.getWicket().getType().name());
-                } else {
-                    int runs = outcome.getRuns();
-                    if (runs == 4) {
-                        batterStats.addFour();
-                    } else if (runs == 6) {
-                        batterStats.addSix();
-                    } else if (runs > 0) {
-                        batterStats.addRuns(runs);
-                    } else {
-                        batterStats.incrementBallsFaced();
-                    }
-                }
-            });
-
-            // Update bowler stats atomically
-            if (!outcome.isExtra() || outcome.getExtraType() == ExtraType.NO_BALL) {
-                repo.executeWithLock(bowlerId, matchId, bowlerStats -> {
-                    if (outcome.isWicket()) {
-                        bowlerStats.addWicket(outcome.getWicket().getType().name());
-                    }
-                    bowlerStats.addRunsConceded(outcome.getRuns());
-                    bowlerStats.addBall();
-                    if (bowlerStats.getBallsBowled() % 6 == 0) {
-                        bowlerStats.addOver();
-                    }
+        // Update batter stats with lock using LockManager
+        lockManager.executeWithLock("PlayerStats", batterId + ":" + matchId, () -> {
+            PlayerMatchStats batterStats = statsRepository.findByPlayerIdAndMatchId(batterId, matchId)
+                .orElseGet(() -> {
+                    PlayerMatchStats newStats = new PlayerMatchStats(batterId, matchId);
+                    statsRepository.save(newStats);
+                    return newStats;
                 });
-            }
-        } else {
-            // Fallback for other repository implementations
-            PlayerMatchStats batterStats = getOrCreateStats(matchId, batterId);
+            
             if (outcome.isWicket()) {
                 batterStats.recordDismissal(outcome.getWicket().getType().name());
             } else {
@@ -153,9 +132,19 @@ public class ScoringService {
                 }
             }
             statsRepository.save(batterStats);
-
-            if (!outcome.isExtra() || outcome.getExtraType() == ExtraType.NO_BALL) {
-                PlayerMatchStats bowlerStats = getOrCreateStats(matchId, bowlerId);
+            return null;
+        });
+        
+        // Update bowler stats with lock using LockManager
+        if (!outcome.isExtra() || outcome.getExtraType() == ExtraType.NO_BALL) {
+            lockManager.executeWithLock("PlayerStats", bowlerId + ":" + matchId, () -> {
+                PlayerMatchStats bowlerStats = statsRepository.findByPlayerIdAndMatchId(bowlerId, matchId)
+                    .orElseGet(() -> {
+                        PlayerMatchStats newStats = new PlayerMatchStats(bowlerId, matchId);
+                        statsRepository.save(newStats);
+                        return newStats;
+                    });
+                
                 if (outcome.isWicket()) {
                     bowlerStats.addWicket(outcome.getWicket().getType().name());
                 }
@@ -165,13 +154,9 @@ public class ScoringService {
                     bowlerStats.addOver();
                 }
                 statsRepository.save(bowlerStats);
-            }
+                return null;
+            });
         }
-    }
-
-    private PlayerMatchStats getOrCreateStats(String matchId, String playerId) {
-        return statsRepository.findByPlayerIdAndMatchId(playerId, matchId)
-            .orElse(new PlayerMatchStats(playerId, matchId));
     }
 
     private void checkAndPublishEvents(String matchId, String batterId, String bowlerId, BallOutcome outcome) {

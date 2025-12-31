@@ -292,5 +292,40 @@ public class CricbuzzSystemImpl implements CricbuzzSystem {
     public List<Command> getCommandHistoryByExecutor(String executorId) {
         return commandInvoker.getHistoryByExecutor(executorId);
     }
+    
+    // ========== Command Factory Methods ==========
+    
+    @Override
+    public Command createAssignUmpireCommand(String matchId, String umpireId, String executorId) {
+        return new com.lld.cricbuzz.command.AssignUmpireCommand(matchService, matchId, umpireId, executorId);
+    }
+    
+    @Override
+    public Command createAssignScorerCommand(String matchId, String scorerId, String executorId) {
+        return new com.lld.cricbuzz.command.AssignScorerCommand(matchService, matchId, scorerId, executorId);
+    }
+    
+    @Override
+    public Command createRecordTossCommand(String matchId, String tossWinnerId, boolean choseBatting, String executorId) {
+        return new com.lld.cricbuzz.command.RecordTossCommand(matchService, matchId, tossWinnerId, choseBatting, executorId);
+    }
+    
+    @Override
+    public Command createSetSquadCommand(String matchId, String teamId, List<String> playerIds, String executorId) {
+        return new com.lld.cricbuzz.command.SetSquadCommand(matchService, matchId, teamId, playerIds, executorId);
+    }
+    
+    @Override
+    public Command createStartMatchCommand(String matchId, String executorId) {
+        return new com.lld.cricbuzz.command.StartMatchCommand(matchService, matchId, executorId);
+    }
+    
+    @Override
+    public Command createAddCommentaryCommand(String matchId, String ballEventId, 
+                                             CommentaryType type, String text, 
+                                             String commentatorId, String executorId) {
+        return new com.lld.cricbuzz.command.AddCommentaryCommand(
+            commentaryService, matchId, ballEventId, type, text, commentatorId, executorId);
+    }
 }
 

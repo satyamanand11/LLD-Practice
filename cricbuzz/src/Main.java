@@ -111,7 +111,7 @@ public class Main {
         System.out.println("   Umpires: " + match.getUmpireIds().size());
         System.out.println("   Scorers: " + match.getScorerIds().size() + "\n");
 
-        System.out.println("5. Setting Squads");
+        System.out.println("5. Setting Squads using Command Pattern");
         List<String> indiaSquad = Arrays.asList(
             kohli.getPlayerId(), rohit.getPlayerId(), bumrah.getPlayerId(),
             pandya.getPlayerId(), dhoni.getPlayerId()
@@ -120,25 +120,53 @@ public class Main {
             smith.getPlayerId(), warner.getPlayerId(), starc.getPlayerId(),
             cummins.getPlayerId(), carey.getPlayerId()
         );
-        system.setMatchSquad(match.getMatchId(), team1.getTeamId(), indiaSquad);
-        system.setMatchSquad(match.getMatchId(), team2.getTeamId(), ausSquad);
-        System.out.println("   Squads set for both teams\n");
+        // Use Command Pattern for setting squads
+        com.lld.cricbuzz.command.Command squadCommand1 = 
+            system.createSetSquadCommand(match.getMatchId(), team1.getTeamId(), indiaSquad, "ADMIN_001");
+        com.lld.cricbuzz.command.Command squadCommand2 = 
+            system.createSetSquadCommand(match.getMatchId(), team2.getTeamId(), ausSquad, "ADMIN_001");
+        system.executeCommand(squadCommand1);
+        system.executeCommand(squadCommand2);
+        System.out.println("   Squads set for both teams using Command Pattern\n");
 
-        System.out.println("6. Recording Toss");
-        system.recordToss(match.getMatchId(), team1.getTeamId(), true);
-        System.out.println("   " + team1.getName() + " won the toss and chose to bat\n");
+        System.out.println("6. Recording Toss using Command Pattern");
+        com.lld.cricbuzz.command.Command tossCommand = 
+            system.createRecordTossCommand(match.getMatchId(), team1.getTeamId(), true, "ADMIN_001");
+        com.lld.cricbuzz.command.CommandResult tossResult = system.executeCommand(tossCommand);
+        System.out.println("   " + tossResult.getMessage() + "\n");
 
-        System.out.println("7. Starting Match");
-        system.startMatch(match.getMatchId());
-        System.out.println("   Match is now LIVE!\n");
+        System.out.println("7. Adding Umpires using Command Pattern");
+        com.lld.cricbuzz.command.Command umpireCommand1 = 
+            system.createAssignUmpireCommand(match.getMatchId(), "UMP_001", "ADMIN_001");
+        com.lld.cricbuzz.command.Command umpireCommand2 = 
+            system.createAssignUmpireCommand(match.getMatchId(), "UMP_002", "ADMIN_001");
+        system.executeCommand(umpireCommand1);
+        system.executeCommand(umpireCommand2);
+        System.out.println("   Umpires assigned using Command Pattern\n");
 
-        System.out.println("8. User Subscriptions (Observer Pattern)");
+        System.out.println("8. Starting Match using Command Pattern");
+        com.lld.cricbuzz.command.Command startCommand = 
+            system.createStartMatchCommand(match.getMatchId(), "ADMIN_001");
+        com.lld.cricbuzz.command.CommandResult startResult = system.executeCommand(startCommand);
+        System.out.println("   " + startResult.getMessage() + "\n");
+        
+        System.out.println("9. Demonstrating Command History");
+        System.out.println("   Command History:");
+        List<com.lld.cricbuzz.command.Command> history = system.getCommandHistory();
+        for (int i = 0; i < history.size(); i++) {
+            com.lld.cricbuzz.command.Command cmd = history.get(i);
+            System.out.println("   " + (i + 1) + ". " + cmd.getDescription() + 
+                             " (by " + cmd.getExecutorId() + ")");
+        }
+        System.out.println();
+
+        System.out.println("10. User Subscriptions (Observer Pattern)");
         system.subscribe("USER_001", SubscriptionType.MATCH, match.getMatchId());
         system.subscribe("USER_002", SubscriptionType.PLAYER, kohli.getPlayerId());
         system.subscribe("USER_003", SubscriptionType.TEAM, team1.getTeamId());
         System.out.println("   Users subscribed to match, player, and team updates\n");
 
-        System.out.println("9. Recording Ball-by-Ball Scoring");
+        System.out.println("11. Recording Ball-by-Ball Scoring");
         System.out.println("    === First Over ===\n");
 
         // First over - India batting
@@ -185,7 +213,7 @@ public class Main {
         system.recordBall(match.getMatchId(), 1, 6, bowler, newStriker, nonStriker, ball6);
         System.out.println("    Ball 1.6: Dot ball\n");
 
-        System.out.println("10. Generating Scorecard");
+        System.out.println("12. Generating Scorecard");
         ScorecardService.Scorecard scorecard = system.getScorecard(match.getMatchId());
         System.out.println("    Match: " + scorecard.getTeam1Id() + " vs " + scorecard.getTeam2Id());
         System.out.println("    Status: " + scorecard.getStatus());
@@ -196,7 +224,7 @@ public class Main {
         }
         System.out.println();
 
-        System.out.println("11. Viewing Commentary");
+        System.out.println("13. Viewing Commentary");
         List<com.lld.cricbuzz.domain.commentary.Commentary> commentaries =
             system.getMatchCommentary(match.getMatchId());
         for (com.lld.cricbuzz.domain.commentary.Commentary comm : commentaries) {

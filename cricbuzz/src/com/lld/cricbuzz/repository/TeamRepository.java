@@ -5,7 +5,15 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Repository interface for Team aggregate
+ * Repository interface for Team entity
+ * 
+ * Separate repository for Team entity allows:
+ * - Independent team management
+ * - Team-specific queries
+ * - Better scalability
+ * 
+ * Note: Locking is handled at the service layer via LockManager.
+ * Repositories remain simple data access layers.
  */
 public interface TeamRepository {
     void save(Team team);

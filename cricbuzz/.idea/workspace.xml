@@ -5,124 +5,72 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7db313d0-28b1-4014-8308-7018e29f81be" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/builder/MatchBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/builder/TournamentBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AddCommentaryCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AddNewsCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AssignScorerCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/AssignUmpireCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/CommandInvoker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/CommandResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/RecordTossCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/SetSquadCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/command/StartMatchCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/CommentaryAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/CommentaryComponent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/CommentaryDecorator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/HighlightsDecorator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/StatisticsDecorator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/decorator/TranslationDecorator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/commentary/Commentary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/commentary/CommentaryType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallEvent.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallOutcome$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallOutcome.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/BallOutcome.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/ExtraType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/ExtraType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Innings.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Innings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Match.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Match.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/MatchStatus.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/MatchStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Over.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Over.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/RunType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/RunType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Wicket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/Wicket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/WicketType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/match/WicketType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/NotificationEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/NotificationType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/Subscription.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/notifications/SubscriptionType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/player/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/player/PlayerMatchStats.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/player/PlayerRole.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/team/Team.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/team/TeamStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/MatchFormat.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/MatchFormat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/Tournament.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/Tournament.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/TournamentStatus.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/domain/tournament/TournamentStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/BoundaryEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/DomainEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/EventBus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/EventHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MatchEndEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MatchEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MatchStartEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/MilestoneEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/events/WicketEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/facade/CricbuzzSystem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/facade/CricbuzzSystemImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/factory/ScoringStrategyFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/CommentaryRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/MatchRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/PlayerMatchStatsRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/PlayerRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/SubscriptionRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/TeamRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/TournamentRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryCommentaryRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryMatchRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryPlayerMatchStatsRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryPlayerRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemorySubscriptionRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryTeamRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/repository/impl/InMemoryTournamentRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/CommentaryService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/EnhancedCommentaryService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/MatchService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/NotificationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/PlayerService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/ScorecardService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/ScoringService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/TeamService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/service/TournamentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/ODIScoringStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/ScoringStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/T20ScoringStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/lld/cricbuzz/strategy/TestScoringStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../MONOREPO_GUIDE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/AUTHENTICATION_DESIGN.md" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/AUTHENTICATION_DESIGN.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/CONCURRENCY_REVIEW.md" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/CONCURRENCY_REVIEW.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/DESIGN_REVIEW.md" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/DESIGN_REVIEW.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/IMPLEMENTATION_SUMMARY.md" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/IMPLEMENTATION_SUMMARY.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/MAIN_CLASS_UPDATES.md" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/MAIN_CLASS_UPDATES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/BookingBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/BookingBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/BookingServiceEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/BookingServiceEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/InvoiceBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/InvoiceBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/entities/Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/observer/BookingCancellationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/observer/BookingCancellationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/observer/NotificationHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/observer/NotificationHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/composite/RoomComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/composite/RoomComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/composite/RoomGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/composite/RoomGroup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/BasePrice.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/BasePrice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/HolidaySurgeDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/HolidaySurgeDecorator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/PriceCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/PriceCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/PriceDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/PriceDecorator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/SeasonalSurgeDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/SeasonalSurgeDecorator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/TrafficSurgeDecorator.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/decorator/TrafficSurgeDecorator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/EmailNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/EmailNotification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/NotificationChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/NotificationChannel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/NotificationFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/NotificationFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/PushNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/PushNotification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/SMSNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/pattern/factory/SMSNotification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/repository/BookingServiceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/repository/BookingServiceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/repository/InMemoryServiceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/repository/InMemoryServiceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/repository/ServiceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/repository/ServiceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/KeyManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/KeyManagementService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hotel-management-system/src/com/lld/hotel/management/service/RoomService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/collab/DocumentEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/collab/DocumentEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/command/EditCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/command/EditCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/history/UndoRedoHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/history/UndoRedoHistory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/manager/EventBusManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../text-editor/src/com/lld/texteditor/manager/EventBusManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ticket-system/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ticket-system/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ticket-system/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ticket-system/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="37WFx7hAu7Ou910vHIOts1m1n2R" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "onboarding.tips.debug.path": "/Users/satyam/lld-practice/cricbuzz/src/Main.java"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;/Users/satyam/lld-practice/stock-brokerage/src/Main.java&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -139,8 +87,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/Main.java</url>
-          <line>63</line>
+          <line>61</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/stock-brokerage/src/Main.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/../stock-brokerage/src/Main.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

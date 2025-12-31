@@ -221,5 +221,40 @@ public interface CricbuzzSystem {
      * Get command history for a specific executor
      */
     List<Command> getCommandHistoryByExecutor(String executorId);
+    
+    // ========== Command Factory Methods ==========
+    // Convenience methods to create commands without exposing services
+    
+    /**
+     * Create command to assign umpire
+     */
+    Command createAssignUmpireCommand(String matchId, String umpireId, String executorId);
+    
+    /**
+     * Create command to assign scorer
+     */
+    Command createAssignScorerCommand(String matchId, String scorerId, String executorId);
+    
+    /**
+     * Create command to record toss
+     */
+    Command createRecordTossCommand(String matchId, String tossWinnerId, boolean choseBatting, String executorId);
+    
+    /**
+     * Create command to set squad
+     */
+    Command createSetSquadCommand(String matchId, String teamId, List<String> playerIds, String executorId);
+    
+    /**
+     * Create command to start match
+     */
+    Command createStartMatchCommand(String matchId, String executorId);
+    
+    /**
+     * Create command to add commentary
+     */
+    Command createAddCommentaryCommand(String matchId, String ballEventId, 
+                                      CommentaryType type, String text, 
+                                      String commentatorId, String executorId);
 }
 

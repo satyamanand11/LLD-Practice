@@ -4,10 +4,16 @@ import com.lld.cricbuzz.domain.match.Match;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
- * Repository interface for Match aggregate
+ * Repository interface for Match entity
+ * 
+ * Match is both an aggregate root AND a frequently accessed entity.
+ * In real systems, this dual nature is common - aggregate roots
+ * still have their own repositories for independent access.
+ * 
+ * Note: Locking is handled at the service layer via LockManager.
+ * Repositories remain simple data access layers.
  */
 public interface MatchRepository {
     void save(Match match);
@@ -16,18 +22,5 @@ public interface MatchRepository {
     List<Match> findByTeamId(String teamId);
     List<Match> findAll();
     void delete(String matchId);
-    
-    /**
-     * Execute an operation with match-level lock for thread-safe updates
-     * @param matchId The match ID to lock
-     * @param action The operation to perform on the match
-     */
-    default void executeWithLock(String matchId, Consumer<Match> action) {
-        // Default implementation - can be overridden by implementations
-        Match match = findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found: " + matchId));
-        action.accept(match);
-        save(match);
-    }
 }
 

@@ -1,6 +1,5 @@
 package com.lld.cricbuzz.service;
 
-import com.lld.cricbuzz.domain.notifications.NotificationEvent;
 import com.lld.cricbuzz.domain.notifications.NotificationType;
 import com.lld.cricbuzz.domain.notifications.Subscription;
 import com.lld.cricbuzz.domain.notifications.SubscriptionType;
@@ -116,9 +115,6 @@ public class NotificationService implements EventHandler {
     private void sendNotifications(List<Subscription> subscriptions, String matchId,
                                   NotificationType type, String message) {
         for (Subscription subscription : subscriptions) {
-            String eventId = "NOTIF_" + UUID.randomUUID().toString().substring(0, 8);
-            NotificationEvent notification = new NotificationEvent(eventId, type, matchId,
-                subscription.getEntityId(), message);
             // In a real system, this would send via email/SMS/push notification
             System.out.println("Notification to user " + subscription.getUserId() + ": " + message);
         }

@@ -4,6 +4,7 @@ import com.lld.cricbuzz.domain.match.Match;
 import com.lld.cricbuzz.domain.tournament.MatchFormat;
 import com.lld.cricbuzz.events.EventBus;
 import com.lld.cricbuzz.events.MatchStartEvent;
+import com.lld.cricbuzz.locking.LockManager;
 import com.lld.cricbuzz.repository.MatchRepository;
 
 import java.util.List;
@@ -12,14 +13,19 @@ import java.util.UUID;
 /**
  * Service for managing matches
  * Single Responsibility: Match lifecycle management
+ * 
+ * Uses LockManager at service layer for thread-safe operations
+ * Repositories remain simple data access layers
  */
 public class MatchService {
     private final MatchRepository matchRepository;
     private final EventBus eventBus;
+    private final LockManager lockManager;
 
     public MatchService(MatchRepository matchRepository, EventBus eventBus) {
         this.matchRepository = matchRepository;
         this.eventBus = eventBus;
+        this.lockManager = LockManager.getInstance();
     }
 
     public Match createMatch(String tournamentId, MatchFormat format,
@@ -39,49 +45,62 @@ public class MatchService {
     }
 
     public void setSquad(String matchId, String teamId, List<String> playerIds) {
-        Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found"));
-        match.setSquad(teamId, playerIds);
-        matchRepository.save(match);
+        // Use LockManager for thread-safe squad updates
+        lockManager.executeWithLock("Match", matchId, () -> {
+            Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+            match.setSquad(teamId, playerIds);
+            matchRepository.save(match);
+        });
     }
 
     public void replacePlayer(String matchId, String teamId, String oldPlayerId, String newPlayerId) {
-        Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found"));
-        match.replacePlayer(teamId, oldPlayerId, newPlayerId);
-        matchRepository.save(match);
+        lockManager.executeWithLock("Match", matchId, () -> {
+            Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+            match.replacePlayer(teamId, oldPlayerId, newPlayerId);
+            matchRepository.save(match);
+        });
     }
 
     public void recordToss(String matchId, String tossWinnerId, boolean choseBatting) {
-        Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found"));
-        match.recordToss(tossWinnerId, choseBatting);
-        matchRepository.save(match);
+        lockManager.executeWithLock("Match", matchId, () -> {
+            Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+            match.recordToss(tossWinnerId, choseBatting);
+            matchRepository.save(match);
+        });
     }
 
     public void startMatch(String matchId) {
-        Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found"));
-        match.startMatch();
-        matchRepository.save(match);
+        lockManager.executeWithLock("Match", matchId, () -> {
+            Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+            match.startMatch();
+            matchRepository.save(match);
+        });
         
-        // Publish event
+        // Publish event outside lock to avoid blocking
         String eventId = "EVT_" + UUID.randomUUID().toString().substring(0, 8);
         eventBus.publish(new MatchStartEvent(eventId, matchId));
     }
 
     public void addUmpire(String matchId, String umpireId) {
-        Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found"));
-        match.addUmpire(umpireId);
-        matchRepository.save(match);
+        lockManager.executeWithLock("Match", matchId, () -> {
+            Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+            match.addUmpire(umpireId);
+            matchRepository.save(match);
+        });
     }
 
     public void addScorer(String matchId, String scorerId) {
-        Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found"));
-        match.addScorer(scorerId);
-        matchRepository.save(match);
+        lockManager.executeWithLock("Match", matchId, () -> {
+            Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+            match.addScorer(scorerId);
+            matchRepository.save(match);
+        });
     }
 
     public Match getMatch(String matchId) {

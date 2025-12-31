@@ -10,6 +10,19 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+/**
+ * Thread-safe in-memory repository for Player entities
+ * Uses ConcurrentHashMap for storage
+ * 
+ * Note: Locking is handled at the service layer via LockManager.
+ * This repository focuses only on data access.
+ * 
+ * In real systems, PlayerRepository would typically:
+ * - Use database (JPA/Hibernate)
+ * - Have caching layer (Redis)
+ * - Support pagination, filtering
+ * - Have separate read/write repositories (CQRS)
+ */
 public class InMemoryPlayerRepository implements PlayerRepository {
     private final Map<String, Player> players = new ConcurrentHashMap<>();
     private final Map<String, List<String>> teamPlayers = new ConcurrentHashMap<>(); // teamId -> playerIds
