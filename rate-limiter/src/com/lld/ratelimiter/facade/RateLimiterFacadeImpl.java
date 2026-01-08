@@ -4,6 +4,7 @@ import com.lld.ratelimiter.config.ConfigurationService;
 import com.lld.ratelimiter.domain.EndpointConfig;
 import com.lld.ratelimiter.domain.RateLimitResult;
 import com.lld.ratelimiter.factory.RateLimitingAlgorithmFactory;
+import com.lld.ratelimiter.locking.LockManager;
 import com.lld.ratelimiter.repository.InMemoryRateLimitStateRepository;
 import com.lld.ratelimiter.repository.RateLimitStateRepository;
 import com.lld.ratelimiter.service.RateLimiterService;
@@ -36,12 +37,14 @@ public class RateLimiterFacadeImpl implements RateLimiterFacade {
         this.configService = new ConfigurationService();
         RateLimitingAlgorithmFactory algorithmFactory = new RateLimitingAlgorithmFactory();
         RateLimitStateRepository stateRepository = new InMemoryRateLimitStateRepository();
+        LockManager lockManager = LockManager.getInstance();
 
         // Wire service
         this.rateLimiterService = new RateLimiterService(
                 configService,
                 algorithmFactory,
-                stateRepository
+                stateRepository,
+                lockManager
         );
 
         // Load default configuration

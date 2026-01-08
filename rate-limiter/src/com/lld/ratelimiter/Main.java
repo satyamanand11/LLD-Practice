@@ -1,16 +1,17 @@
+package com.lld.ratelimiter;
+
 import com.lld.ratelimiter.algorithm.impl.FixedWindowAlgorithm;
 import com.lld.ratelimiter.algorithm.impl.SlidingWindowLogAlgorithm;
 import com.lld.ratelimiter.algorithm.impl.TokenBucketAlgorithm;
 import com.lld.ratelimiter.domain.EndpointConfig;
 import com.lld.ratelimiter.domain.RateLimitResult;
-import com.lld.ratelimiter.facade.RateLimiterFacade;
 import com.lld.ratelimiter.facade.RateLimiterFacadeImpl;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Main class demonstrating Rate Limiter System
+ * com.lld.ratelimiter.Main class demonstrating Rate Limiter System
  * 
  * This demonstrates:
  * - Multiple rate limiting algorithms (TokenBucket, SlidingWindowLog, FixedWindow)
