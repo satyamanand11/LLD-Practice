@@ -4,13 +4,13 @@ import com.lld.job.scheduler.handler.TaskHandler;
 import com.lld.job.scheduler.schedule.SchedulePolicy;
 
 public class TaskDefinition {
-    int taskId;
+    String taskId;
     String taskName;
     SchedulePolicy taskSchedule;
     TaskHandler taskHandler;
     TaskStatus taskStatus;
 
-    public TaskDefinition(int taskId, String taskName, SchedulePolicy taskSchedule, TaskHandler taskHandler, TaskStatus taskStatus) {
+    public TaskDefinition(String taskId, String taskName, SchedulePolicy taskSchedule, TaskHandler taskHandler, TaskStatus taskStatus) {
         this.taskId = taskId;
         this.taskName = taskName;
         this.taskSchedule = taskSchedule;
@@ -18,7 +18,7 @@ public class TaskDefinition {
         this.taskStatus = taskStatus;
     }
 
-    public int getTaskId() {
+    public String getTaskId() {
         return taskId;
     }
 
