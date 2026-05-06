@@ -12,8 +12,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public class TaskSchedulerService {
+
+    private static final Duration IDLE_SLEEP = Duration.ofMillis(100);
 
     private final TaskDefinitionRepository taskDefinitionRepository;
     private final TaskExecutionService taskExecutionService;
@@ -48,7 +51,7 @@ public class TaskSchedulerService {
         );
     }
 
-    public void start() {
+    public synchronized void start() {
         if (running) {
             return;
         }
@@ -56,10 +59,15 @@ public class TaskSchedulerService {
         running = true;
 
         dispatcherThread = new Thread(this::dispatchLoop, "scheduler-dispatcher");
+        dispatcherThread.setDaemon(true);
         dispatcherThread.start();
     }
 
-    public void stop() {
+    public synchronized void stop() {
+        if (!running) {
+            return;
+        }
+
         running = false;
 
         if (dispatcherThread != null) {
@@ -67,6 +75,14 @@ public class TaskSchedulerService {
         }
 
         workerPool.shutdown();
+        try {
+            if (!workerPool.awaitTermination(5, TimeUnit.SECONDS)) {
+                workerPool.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            workerPool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
     public void schedule(TaskDefinition taskDefinition) {
@@ -86,30 +102,86 @@ public class TaskSchedulerService {
         });
     }
 
+    public boolean cancel(String taskId) {
+        Optional<TaskDefinition> optionalTaskDefinition =
+                taskDefinitionRepository.findById(taskId);
+
+        if (optionalTaskDefinition.isEmpty()) {
+            return false;
+        }
+
+        TaskDefinition taskDefinition = optionalTaskDefinition.get();
+        taskDefinition.cancel();
+
+        // Lazy removal: any queued ScheduledTask for this id will be skipped
+        // when the dispatcher picks it up because isActive() will return false.
+        scheduledTaskQueue.removeIf(
+                scheduled -> scheduled.getTaskDefinitionId().equals(taskId)
+        );
+        return true;
+    }
+
+    public boolean pause(String taskId) {
+        Optional<TaskDefinition> optionalTaskDefinition =
+                taskDefinitionRepository.findById(taskId);
+
+        if (optionalTaskDefinition.isEmpty()) {
+            return false;
+        }
+
+        optionalTaskDefinition.get().pause();
+        return true;
+    }
+
+    public boolean resume(String taskId) {
+        Optional<TaskDefinition> optionalTaskDefinition =
+                taskDefinitionRepository.findById(taskId);
+
+        if (optionalTaskDefinition.isEmpty()) {
+            return false;
+        }
+
+        TaskDefinition taskDefinition = optionalTaskDefinition.get();
+        taskDefinition.resume();
+
+        if (!taskDefinition.isActive()) {
+            return false;
+        }
+
+        // Re-arm next execution if we have no pending ScheduledTask for this id.
+        boolean hasPending = scheduledTaskQueue.stream()
+                .anyMatch(s -> s.getTaskDefinitionId().equals(taskId));
+
+        if (!hasPending) {
+            taskDefinition.getSchedulePolicy()
+                    .nextExecutionAfter(Instant.now())
+                    .ifPresent(nextTime -> scheduledTaskQueue.offer(
+                            new ScheduledTask(taskId, nextTime)
+                    ));
+        }
+        return true;
+    }
+
     private void dispatchLoop() {
         while (running) {
             try {
-                ScheduledTask scheduledTask = scheduledTaskQueue.peek();
+                ScheduledTask head = scheduledTaskQueue.peek();
 
-                if (scheduledTask == null) {
-                    sleep(Duration.ofMillis(100));
+                if (head == null) {
+                    sleep(IDLE_SLEEP);
                     continue;
                 }
 
                 Instant now = Instant.now();
 
-                if (scheduledTask.getExecutionTime().isAfter(now)) {
-                    Duration sleepDuration = Duration.between(
-                            now,
-                            scheduledTask.getExecutionTime()
-                    );
-
-                    sleep(min(sleepDuration, Duration.ofMillis(100)));
+                if (head.getExecutionTime().isAfter(now)) {
+                    Duration remaining = Duration.between(now, head.getExecutionTime());
+                    sleep(min(remaining, IDLE_SLEEP));
                     continue;
                 }
 
                 if (!availableWorkerSlots.tryAcquire()) {
-                    sleep(Duration.ofMillis(100));
+                    sleep(IDLE_SLEEP);
                     continue;
                 }
 
@@ -131,6 +203,7 @@ public class TaskSchedulerService {
 
             } catch (InterruptedException exception) {
                 Thread.currentThread().interrupt();
+                break;
             } catch (Exception exception) {
                 System.out.println("Dispatcher error: " + exception.getMessage());
             }
@@ -159,18 +232,22 @@ public class TaskSchedulerService {
                                 completedScheduledTask.getExecutionTime()
                         );
 
-        nextExecutionTime.ifPresent(nextTime -> {
-            ScheduledTask nextScheduledTask = new ScheduledTask(
-                    taskDefinition.getTaskId(),
-                    nextTime
-            );
+        if (nextExecutionTime.isEmpty()) {
+            // No further executions scheduled (e.g. one-time task).
+            taskDefinition.markCompleted();
+            return;
+        }
 
-            scheduledTaskQueue.offer(nextScheduledTask);
-        });
+        ScheduledTask nextScheduledTask = new ScheduledTask(
+                taskDefinition.getTaskId(),
+                nextExecutionTime.get()
+        );
+        scheduledTaskQueue.offer(nextScheduledTask);
     }
 
     private void sleep(Duration duration) throws InterruptedException {
-        Thread.sleep(duration.toMillis());
+        long millis = Math.max(1L, duration.toMillis());
+        Thread.sleep(millis);
     }
 
     private Duration min(Duration first, Duration second) {
