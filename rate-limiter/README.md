@@ -159,8 +159,8 @@ EndpointConfig config = new EndpointConfig(
 
 ```bash
 cd rate-limiter
-javac -d out -sourcepath src src/Main.java
-java -cp out Main
+javac -d out -sourcepath src src/com.lld.ratelimiter.Main.java
+java -cp out com.lld.ratelimiter.Main
 ```
 
 ## Project Structure
@@ -195,7 +195,7 @@ rate-limiter/
 │   │   └── facade/
 │   │       ├── RateLimiterFacade.java
 │   │       └── RateLimiterFacadeImpl.java
-│   └── Main.java
+│   └── com.lld.ratelimiter.Main.java
 ├── DESIGN.md
 └── README.md
 ```
@@ -228,4 +228,5 @@ The design supports easy extension:
 | Enforce rate limits | ✅ | RateLimiterService with algorithms |
 | Structured result | ✅ | RateLimitResult (allowed, remaining, retryAfterMs) |
 | Default limit | ✅ | Default EndpointConfig fallback |
+
 

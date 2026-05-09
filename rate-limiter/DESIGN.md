@@ -507,7 +507,7 @@ public interface RateLimitingAlgorithm {
 - [ ] Configuration Service
 - [ ] Rate Limiter Service
 - [ ] Facade
-- [ ] Main.java demo
+- [ ] com.lld.ratelimiter.Main.java demo
 
 ---
 
@@ -522,4 +522,5 @@ This design provides:
 - ✅ Extensible architecture
 
 **Ready for implementation!** 🚀
+
 
